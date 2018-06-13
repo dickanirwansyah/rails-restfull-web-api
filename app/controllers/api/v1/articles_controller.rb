@@ -26,7 +26,14 @@ module Api
             end
 
             def update
-                
+                article = Article.find(params[:id])
+                if article.update_attributes(article_params)
+                    render json: {status: 'UPDATE', message: 'article successfully update', data:article},
+                    status: :ok
+                else
+                    render json: {status: 'ERROR', message: 'article not update', data:article.errors},
+                    status: :unprocessable_entity
+                end
             end
 
             def destroy
@@ -35,7 +42,7 @@ module Api
                 render json: {status: 'SUCCESS', message: 'articles delete', data:article},
                 status: :ok
             end
-
+            
             private def article_params
                 params.permit(:title, :body)
             end
